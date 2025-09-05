@@ -9,11 +9,13 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\Traits\HasUuid;
-
+use App\Models\Traits\Multitenancy;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuid;
+    use HasApiTokens, HasFactory, Notifiable, HasUuid, Multitenancy;
+
+    public $timestamps = true;
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +26,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'first_name',
+        'last_name',
+        'company_id',
     ];
 
     /**
@@ -32,6 +37,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
+        'id',
         'password',
         'remember_token',
     ];
@@ -42,7 +48,7 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_verified_at' => 'immutable_datetime',
         'password' => 'hashed',
     ];
 }

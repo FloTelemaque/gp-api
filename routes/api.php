@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,11 +24,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('auth')->group(function() {
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'register'])->name('users.user_registration');
+    Route::post('/tokens/create', [AuthController::class, 'generateToken']);
 });
 
 Route::post('/user', [UserController::class, 'store']);
 
-Route::prefix('tokens')->group(function() {
-    Route::post('/create', [ApiController::class, 'createToken']);
-});
+
+// Route::group(['middleware' => ['role:admin']], function () {
+    Route::apiResources([
+        'companies' => CompanyController::class,
+    ], ['only' => ['store', 'update']]);
+
+// });

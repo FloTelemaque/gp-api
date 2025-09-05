@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use Dedoc\Scramble\Scramble;
+use Illuminate\Routing\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +24,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+
+        Scramble::ignoreDefaultRoutes();
+        Scramble::configure()
+            ->routes(function (Route $route) {
+                return ($route->uri !== RouteServiceProvider::HOME);
+            });
     }
 }

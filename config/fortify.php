@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\RouteServiceProvider;
 use Laravel\Fortify\Features;
 
 return [
@@ -73,7 +74,7 @@ return [
     |
     */
 
-    'home' => '/home',
+    'home' => RouteServiceProvider::HOME,
 
     /*
     |--------------------------------------------------------------------------
@@ -86,7 +87,7 @@ return [
     |
     */
 
-    'prefix' => '',
+    'prefix' => 'auth',
 
     'domain' => null,
 
@@ -101,7 +102,7 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+    'middleware' => ['web', 'json'],
 
     /*
     |--------------------------------------------------------------------------
