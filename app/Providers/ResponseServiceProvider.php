@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+
+use Illuminate\Support\Facades\Response;
 
 class ResponseServiceProvider extends ServiceProvider
 {
@@ -13,10 +14,11 @@ class ResponseServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        //
+
     }
+
 
     /**
      * Bootstrap services.

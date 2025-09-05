@@ -7,7 +7,7 @@ return [
      * Your API path. By default, all routes starting with this path will be added to the docs.
      * If you need to change this behavior, you can add your custom routes resolver using `Scramble::routes()`.
      */
-    'api_path' => 'api',
+    'api_path' => '',
 
     /*
      * Your API domain. By default, app domain is used. This is also a part of the default API routes
@@ -108,4 +108,13 @@ return [
     ],
 
     'extensions' => [],
+
+    'operations' => [
+        'group' => function (Illuminate\Routing\Route $route, string $controller, string $method) {
+            // S'il y a une logique ici, elle peut surcharger @group.
+            // Par exemple, si le code retourne le nom du contrôleur,
+            // la directive @group sera ignorée.
+            return Illuminate\Support\Str::of($controller)->classBasename()->replace('Controller', '');
+        },
+    ],
 ];

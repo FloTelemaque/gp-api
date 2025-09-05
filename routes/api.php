@@ -3,10 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\ApiController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +25,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('auth')->group(function() {
-    Route::post('/register', [AuthController::class, 'register'])->name('users.user_registration');
-    Route::post('/tokens/create', [AuthController::class, 'generateToken']);
+    Route::post('/register', [AuthController::class, 'register'])
+        ->name('auth.register');
+    Route::post('/tokens/create', [AuthController::class, 'generateToken'])
+        ->name('auth.tokens.create');
+
+    // Login Routes
+    Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+        ->name('auth.login');
+
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->middleware(['auth'])
+        ->name('auth.logout');
 });
 
 Route::post('/user', [UserController::class, 'store']);

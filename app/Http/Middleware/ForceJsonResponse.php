@@ -20,6 +20,10 @@ class ForceJsonResponse
                 // mail('fmanas@gmail.com', 'GP - Error', __CLASS__);
                 $content = response()->api(['message' => $originalContent], false, 500);
             } elseif (empty($originalContent['query']) || empty($originalContent['response'])) {
+                if (empty($originalContent['message'])) {
+                    $originalContent['message'] = $response->statusText();
+                }
+
                 $content = response()->api($originalContent, !!preg_match('/^2/', $response->status()), $response->status());
             }
 

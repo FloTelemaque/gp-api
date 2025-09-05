@@ -1,38 +1,49 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\Users\StoreRequest;
-use App\Models\Company;
-use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Validation\ValidationException;
 
+use App\Http\Requests\Users\StoreRequest;
+use App\Models\Company;
+use App\Models\User;
+
+use App\Services\ResponseCodeService;
+
+use Dedoc\Scramble\Attributes\Group;
+
+#[Group('Auth')]
 class AuthController
 {
+
+    #[Group(weight: 1)]
     /**
      * User registration
      *
      * Use this to generate a user/password couple linked to a company.
      *
-     *
      * @param Request $request
      *
      * @return JsonResponse
+     *
+     *  @status 200
+     *  @response array{
+     *      "access_token": "2|t4jzwe2WVU9vDBZP66TIwPVVheSpOqfAQZmBzP9Rdaa5ddd3",
+     *      "token_name": "web",
+     *      "token_type": "Bearer"
+     *  }
      */
     public function register(StoreRequest $request)
     {
-
 
         $companyUuid = $request->input('company_uuid');
         $company = Company::whereUuid($companyUuid)->first();
 
         if (is_null($company))   {
-            return response()->json(['error' => 'Invalid request'], 401);
+            abort(ResponseCodeService::HTTP_UNAUTHORIZED);
         }
 
         $data = [
@@ -53,6 +64,7 @@ class AuthController
     }
 
 
+    #[Group(weight: 4)]
     /**
      * Token generation
      *
