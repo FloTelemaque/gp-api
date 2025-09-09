@@ -8,6 +8,8 @@ use App\Models\Company;
 
 use Illuminate\Http\Request;
 
+use App\Enums\CompanyStatus;
+
 use Exception;
 use Throwable;
 
@@ -18,7 +20,9 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        $companies = Company::whereIn('status', [CompanyStatus::CREATED, CompanyStatus::ACTIVE])->orderBy('id', 'ASC')->get();
+
+        return response()->api($companies);
     }
 
     /**

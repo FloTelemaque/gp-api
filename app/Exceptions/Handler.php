@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Services\ResponseCodeService;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Auth\AuthenticationException; // <-- Make sure to import this class
 
 class Handler extends ExceptionHandler
 {
@@ -26,5 +28,20 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+
+    /**
+     * Convert an authentication exception into a response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Auth\AuthenticationException  $exception
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        // For an API-only application, we always want to return a JSON response.
+        // This method overrides the default redirection behavior.
+        return response()->api(['message' => 'Unauthenticated.'], ResponseCodeService::HTTP_UNAUTHORIZED);
     }
 }

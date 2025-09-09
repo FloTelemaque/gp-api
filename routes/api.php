@@ -20,8 +20,22 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::middleware('auth:sanctum')->group(function() {
+    Route::get('/user', [UserController::class, 'me']);
+
+    Route::apiResources([
+        'users' => UserController::class,
+    ], ['only' => ['index', 'update']]);
+
+    Route::group(['middleware' => ['role:admin']], function () {
+        Route::apiResources([
+            'companies' => CompanyController::class,
+        ], ['only' => ['index', 'store', 'update']]);
+    });
 });
 
 Route::prefix('auth')->group(function() {
@@ -40,11 +54,3 @@ Route::prefix('auth')->group(function() {
 });
 
 Route::post('/user', [UserController::class, 'store']);
-
-
-// Route::group(['middleware' => ['role:admin']], function () {
-    Route::apiResources([
-        'companies' => CompanyController::class,
-    ], ['only' => ['store', 'update']]);
-
-// });

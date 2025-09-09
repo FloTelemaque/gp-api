@@ -74,5 +74,6 @@ class Kernel extends HttpKernel
 
         'json' => \App\Http\Middleware\ForceJsonResponse::class,
 
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
     ];
 }

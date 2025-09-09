@@ -10,10 +10,12 @@ use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\Traits\HasUuid;
 use App\Models\Traits\Multitenancy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuid, Multitenancy;
+    use HasApiTokens, HasFactory, Notifiable, HasUuid, Multitenancy, HasRoles;
 
     public $timestamps = true;
 
@@ -38,8 +40,17 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'id',
+        'name',
         'password',
+        'email_verified_at',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'two_factor_confirmed_at',
+        'created_at',
+        'updated_at',
         'remember_token',
+        'roles',
+        'laravel_through_key'
     ];
 
     /**
@@ -51,4 +62,35 @@ class User extends Authenticatable
         'email_verified_at' => 'immutable_datetime',
         'password' => 'hashed',
     ];
+
+
+    /**
+     * Generate token on  if the user is an administrator.
+     */
+    protected function token(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->createToken('api')->plainTextToken
+        );
+    }
+
+
+    /**
+     * Fullname
+     */
+    protected function fullname(): Attribute
+    {
+        return new Attribute(
+            get: fn () => "{$this->first_name} {$this->last_name}"
+        );
+    }
+
+
+    /**
+     * Return is admin role
+     */
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
 }

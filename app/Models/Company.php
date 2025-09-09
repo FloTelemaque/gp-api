@@ -31,5 +31,6 @@ class Company extends Model
      */
     protected $hidden = [
         'id',
+        'updated_at',
     ];
 }
