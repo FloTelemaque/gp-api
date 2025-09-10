@@ -6,6 +6,7 @@ use App\Services\ResponseCodeService;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Auth\AuthenticationException; // <-- Make sure to import this class
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class Handler extends ExceptionHandler
 {
@@ -27,6 +28,13 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+
+        $this->renderable(function (UnauthorizedException $e, $request) {
+            return response()->json([
+                'message' => 'You do not have the required authorization.',
+            ], ResponseCodeService::HTTP_FORBIDDEN);
         });
     }
 

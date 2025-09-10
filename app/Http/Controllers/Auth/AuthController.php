@@ -64,6 +64,22 @@ class AuthController
     }
 
 
+    #[Group(weight: 3)]
+    /**
+     * Logout user
+     *
+     * Destroy an authenticated session.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->api(['message' => 'Logged out successfully.']);
+    }
+
+
     #[Group(weight: 4)]
     /**
      * Token generation

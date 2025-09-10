@@ -30,19 +30,4 @@ class AuthenticatedSessionController extends FortifyAuthenticatedSessionControll
     {
         return call_user_func_array([parent::class, 'store'], func_get_args());
     }
-
-
-    #[Group('Auth', weight: 3)]
-    /**
-     * Logout user
-     *
-     * Destroy an authenticated session.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Laravel\Fortify\Contracts\LogoutResponse
-     */
-    public function destroy(Request $request): LogoutResponse
-    {
-        return call_user_func_array([parent::class, 'destroy'], func_get_args());
-    }
 }
