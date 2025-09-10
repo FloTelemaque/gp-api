@@ -18,6 +18,10 @@ class UserController extends Controller
 {
 
     /**
+     * Current user
+     *
+     * Get the authenticated user.
+     *
      * @param Request $request
      *
      * @return User resource

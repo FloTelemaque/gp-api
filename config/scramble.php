@@ -117,4 +117,9 @@ return [
             return Illuminate\Support\Str::of($controller)->classBasename()->replace('Controller', '');
         },
     ],
+
+    'routes' => function (\Illuminate\Routing\Route $route) {
+        // On inclut seulement les routes dont l'URI commence par 'api/v1'
+        return \Illuminate\Support\Str::startsWith($route->uri, 'api/v1');
+    },
 ];

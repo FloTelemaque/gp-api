@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
         Scramble::ignoreDefaultRoutes();
         Scramble::configure()
             ->routes(function (Route $route) {
-                return ($route->uri !== RouteServiceProvider::HOME);
+                return in_array('api', $route->middleware());
             });
     }
 }
